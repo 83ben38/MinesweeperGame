@@ -1,6 +1,9 @@
+import acm.graphics.GLabel;
+import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
-import svu.csc213.Dialog;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class Minesweeper extends GraphicsProgram {
@@ -140,7 +143,7 @@ public class Minesweeper extends GraphicsProgram {
             }
         });
     }
-    public final static Level level = levels.get(Dialog.getInteger("What level would you like?"));
+    public static Level level;
 
     public static Minesweeper minesweeper;
     public static Plane game;
@@ -151,6 +154,48 @@ public class Minesweeper extends GraphicsProgram {
 
     @Override
     public void run() {
+        for (int i = 0; i < levels.size(); i++) {
+            GRect levelButton = new GRect(50, 30);
+            GLabel levelNumber = new GLabel("Level " + i);
+            int finalI = i;
+            levelButton.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    level = levels.get(finalI);
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+            add(levelButton,60*i,30);
+            add(levelNumber,levelButton.getX(),levelButton.getY() + levelNumber.getHeight()/2);
+        }
+        while (level == null){
+            pause(10);
+        }
+        removeAll();
+        run2();
+    }
+
+
+    public void run2() {
         SIZE = level.size();
         TILE_SIZE = level.tileSize();
         DIMENSIONS = level.dimensions();
