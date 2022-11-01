@@ -2,6 +2,7 @@ import acm.graphics.GCompound;
 import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
+import svu.csc213.Dialog;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -64,6 +65,16 @@ public class Plane extends GCompound {
                         flagged = !flagged;
                         ((GRect)objects[0]).setFillColor(flagged ? Color.red : Color.gray);
                         Minesweeper.game.resetTiles();
+                        boolean done = true;
+                        for (Plane p: Minesweeper.game.getAllSquares()) {
+                            if (Minesweeper.game.getTotalMines(p) != 0){
+                                done = false;
+                                break;
+                            }
+                        }
+                        if (done){
+                            Dialog.showMessage("you win!");
+                        }
                     }
                 }
 

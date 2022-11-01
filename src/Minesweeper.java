@@ -49,6 +49,42 @@ public class Minesweeper extends GraphicsProgram {
         });
         levels.add(new Level() {
             @Override
+            public int mineChance() {
+                return 8;
+            }
+
+            @Override
+            public int size() {
+                return 3;
+            }
+
+            @Override
+            public int tileSize() {
+                return 15;
+            }
+
+            @Override
+            public int dimensions() {
+                return 5;
+            }
+
+            @Override
+            public boolean startingCriteria(int[] dimensions1, int[] dimensions2) {
+                return dimensions1[4] == dimensions2[4] && dimensions1[3] == dimensions2[3];
+            }
+
+            @Override
+            public boolean isNextTo(int[] dimension1, int[] dimension2) {
+                for (int i = 0; i < dimension1.length; i++) {
+                    if (dimension1[i] > dimension2[i]){
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+        levels.add(new Level() {
+            @Override
             public boolean isNextTo(int dimension1, int dimension2, int dimensionNumber) {
                 return (dimensionNumber%2==0 ? Math.abs(dimension1-dimension2) < 2 : Math.abs(dimension1-dimension2) < 2 && dimension1-dimension2 != 0);
             }
@@ -140,6 +176,37 @@ public class Minesweeper extends GraphicsProgram {
             @Override
             public boolean isNextTo(int[] dimension1, int[] dimension2) {
                 return dimension1[1]+dimension1[2]+dimension1[0]+dimension1[3] == dimension2[1]+dimension2[2]+dimension2[0]+dimension2[3] || dimension1[1]-dimension1[2]-dimension1[0]+dimension1[3] == dimension2[1]-dimension2[2]-dimension2[0]+dimension2[3];
+            }
+        });
+        levels.add(new Level() {
+            @Override
+            public int mineChance() {
+                return 7;
+            }
+
+            @Override
+            public int size() {
+                return 5;
+            }
+
+            @Override
+            public int tileSize() {
+                return 25;
+            }
+
+            @Override
+            public int dimensions() {
+                return 3;
+            }
+
+            @Override
+            public boolean startingCriteria(int[] dimensions1, int[] dimensions2) {
+                return dimensions1[1] == dimensions2[1] && dimensions1[0] == dimensions2[0];
+            }
+
+            @Override
+            public boolean isNextTo(int[] dimension1, int[] dimension2) {
+                return Math.abs(dimension2[2]-dimension1[1]) < 2 && Math.abs(dimension2[1]-dimension1[0]) < 2 && Math.abs(dimension2[0]-dimension1[2]) < 2;
             }
         });
     }
