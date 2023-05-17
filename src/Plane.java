@@ -40,29 +40,11 @@ public class Plane extends GCompound {
                         return;
                     }
                     if (e.getButton() == MouseEvent.BUTTON1) {
-                        if (!Minesweeper.first_picked){
-                            for (Plane p: Minesweeper.game.getAllSquares()) {
-                                if (Minesweeper.level.startingCriteria(dimensions,p.dimensions)){
-                                    p.mine = false;
-                                    p.reveal();
-                                }
-                            }
-                            mine = false;
-                            reveal();
-                            Minesweeper.first_picked = true;
-                        }
-                        else if (mine){
-                            Minesweeper.playable = false;
-                            for (Plane p: Minesweeper.game.getAllSquares()) {
-                                p.reveal();
-                            }
-                        }
-                        else{
-                            reveal();
-                        }
+                        clicked(false);
                     }
-                    else{
+                    else if (!(revealed && !flagged)){
                         flagged = !flagged;
+                        revealed = flagged;
                         ((GRect)objects[0]).setFillColor(flagged ? Color.red : Color.gray);
                         Minesweeper.game.resetTiles();
                         boolean done = true;
@@ -200,5 +182,41 @@ public class Plane extends GCompound {
             add(objects[2], 0, getHeight() / 2);
         }
         Minesweeper.game.resetTiles();
+    }
+    public void clicked(boolean reveal){
+        if (!Minesweeper.first_picked){
+            for (Plane p: Minesweeper.game.getAllSquares()) {
+                if (Minesweeper.level.startingCriteria(dimensions,p.dimensions)){
+                    p.mine = false;
+                    p.reveal();
+                }
+            }
+            mine = false;
+            reveal();
+            Minesweeper.first_picked = true;
+        }
+        else if (mine){
+            Minesweeper.playable = false;
+            for (Plane p: Minesweeper.game.getAllSquares()) {
+                p.reveal();
+            }
+        }
+        else if (revealed && Minesweeper.game.getTotalMines(this) == 0 ){
+            for (Plane p: Minesweeper.game.getAllNextTo(this)) {
+                if (!p.revealed) {
+                    p.clicked(true);
+                }
+            }
+        }
+        else{
+            reveal();
+            if(reveal && Minesweeper.game.getTotalMines(this) == 0){
+                for (Plane p: Minesweeper.game.getAllNextTo(this)) {
+                    if (!p.revealed) {
+                        p.clicked(true);
+                    }
+                }
+            }
+        }
     }
 }

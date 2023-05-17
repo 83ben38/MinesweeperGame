@@ -1,4 +1,5 @@
 public interface Level {
+
     default boolean isNextTo(int dimension1, int dimension2, int dimensionNumber){
         return true;
     }
